@@ -2,7 +2,7 @@
 
 ## Robust Lane Finding Project using advanced Computer Vision Techniques
 
-<img src="output_images/data_drawn.png\" width=\"480\" alt=\"Combined Image" />
+<img src="output_images/data_drawn.png" width="480" alt="Combined Image" />
 
 The goals / steps of this project are the following:
 * Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.\n",
@@ -129,17 +129,20 @@ The radius of curvature is based upon [this website](http://www.intmath.com/appl
    
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
    
-I implemented this step in the code cells titled \"Draw the Detected Lane Back onto the Original Image\" and \"Draw Curvature Radius and Distance from Center Data onto the Original Image\" in the Jupyter notebook. A polygon is generated based on plots of the left and right fits, warped back to the perspective of the original image using the inverse perspective matrix `Minv` and overlaid onto the original image. The image below is an example of the results of the `draw_lane` function:\n",
+I implemented this step in the code cells titled \"Draw the Detected Lane Back onto the Original Image\" and \"Draw Curvature Radius and Distance from Center Data onto the Original Image\" in the Jupyter notebook. A polygon is generated based on plots of the left and right fits, warped back to the perspective of the original image using the inverse perspective matrix `Minv` and overlaid onto the original image. The image below is an example of the results of the `draw_lane` function.
    ![alt text][im13]
 Below is an example of the results of the `draw_data` function, which writes text identifying the curvature radius and vehicle position data onto the original image:
     ![alt text][im14]
    
 ### Pipeline (video)
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+
 Here are the links to various videos generated using the pipeline above:
 
 [Project video](./project_video_output.mp4)
+
 [Challenge video](./challenge_video_output.mp4)
+
 [Harder challenge video](./harder_challenge_video_output.mp4)
 
 ### Discussion
@@ -153,5 +156,7 @@ Below are some more considerations to make it more robust
     
 ### References
 [1] Juneja, M., & Sandhu, P. S. (2009). Performance evaluation of edge detection techniques for images in spatial domain. International Journal of Computer Theory and Engineering, 1(5), 614.
-[2] Yoo, H., Yang, U., & Sohn, K. (2013). Gradient-enhancing conversion for illumination-robust lane detection. IEEE Transactions on Intelligent Transportation Systems, 14(3), 1083-1094.
+
+[2] Yoo, H., Yang, U., & Sohn, K. (2013). Gradient-enhancing conversion for illumination-robust lane detection. IEEE Transactions on Intelligent Transportation Systems, 14(3), 1083-1094
+
 [3] McCall, J. C., & Trivedi, M. M. (2006). Video-based lane estimation and tracking for driver assistance: survey, system, and evaluation. IEEE transactions on intelligent transportation systems, 7(1), 20-37.
