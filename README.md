@@ -1,7 +1,8 @@
-# Self-Driving Car Engineer Nanodegree Program,
+# Self-Driving Car Engineer Nanodegree Program
+
 ## Robust Lane Finding Project using advanced Computer Vision Techniques
 
-<img src=\"output_images/data_drawn.png\" width=\"480\" alt=\"Combined Image" />
+<img src="output_images/data_drawn.png\" width=\"480\" alt=\"Combined Image" />
 
 The goals / steps of this project are the following:
 * Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.\n",
@@ -40,51 +41,58 @@ The goals / steps of this project are the following:
 
 ### Writeup / README
 
-    #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.
+#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.
     
-    ### Camera Calibration
-    #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image. The OpenCV functions `findChessboardCorners` and `calibrateCamera` are used for the image calibration. 3D points -object points and 2D image points - image points are calculated using these functions. A number of images of a chessboard, taken from different angles with the same camera, comprise the input. Arrays of object points, corresponding to the location (essentially indices) of internal corners of a chessboard, and image points, the pixel locations of the internal chessboard corners determined by `findChessboardCorners`, are fed to `calibrateCamera`. `calibrateCamera` returns the camera matrix, distortion coefficients, rotation and translation vectors etc. These coefficients are constant for a given camera (and lens). These can then be used by the OpenCV `undistort` function to undo the effects of distortion on any image produced by the same camera. The below image depicts the corners drawn onto twenty chessboard images using the OpenCV function `drawChessboardCorners`
-    ![alt text][im01]
+### Camera Calibration
+#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image. The OpenCV functions `findChessboardCorners` and `calibrateCamera` are used for the image calibration. 3D points -object points and 2D image points - image points are calculated using these functions. A number of images of a chessboard, taken from different angles with the same camera, comprise the input. Arrays of object points, corresponding to the location (essentially indices) of internal corners of a chessboard, and image points, the pixel locations of the internal chessboard corners determined by `findChessboardCorners`, are fed to `calibrateCamera`. `calibrateCamera` returns the camera matrix, distortion coefficients, rotation and translation vectors etc. These coefficients are constant for a given camera (and lens). These can then be used by the OpenCV `undistort` function to undo the effects of distortion on any image produced by the same camera. The below image depicts the corners drawn onto twenty chessboard images using the OpenCV function `drawChessboardCorners`
 
-    The image below depicts the results of applying `undistort`, using the calibration and distortion coefficients, to one of the chessboard images:
+![alt text][im01]
 
-    ![alt text][im02]
+The image below depicts the results of applying `undistort`, using the calibration and distortion coefficients, to one of the chessboard images:
 
-    ### Pipeline (single images)
-    #### 1. Provide an example of a distortion-corrected image.
-    The image below depicts the results of applying `undistort` to one of the project dashcam images:
+![alt text][im02]
+
+### Pipeline (single images)
+#### 1. Provide an example of a distortion-corrected image.
+The image below depicts the results of applying `undistort` to one of the project dashcam images:
     ![alt text][im03]
   
-    #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
     
-    Next is to use the Sobel Gradients and Color channel thresholds. I explored several combinations of sobel gradient thresholds and color channel thresholds in multiple color spaces.
+Next is to use the Sobel Gradients and Color channel thresholds. I explored several combinations of sobel gradient thresholds and color channel thresholds in multiple color spaces.
     
-    We need to pass a single color channel to the `cv2.Sobel()` function, so first convert it to grayscale - `cv2.cvtColor(im, cv2.COLOR_RGB2GRAY)`
+We need to pass a single color channel to the `cv2.Sobel()` function, so first convert it to grayscale - `cv2.cvtColor(im, cv2.COLOR_RGB2GRAY)`
 
-    Below is an example of absolute sobel threshold:
-    ![alt text][im18],
-    Below is an example of the combination of sobel magnitude:
+Below is an example of absolute sobel threshold:
+    ![alt text][im18]
+    
+Below is an example of the combination of sobel magnitude:
     ![alt text][im19]
 
-    Below is an example of the combination of sobel magnitude and direction thresholds:
+Below is an example of the combination of sobel magnitude and direction thresholds:
     ![alt text][im06]
-    The below image shows the various channels of three different color spaces for the same image:
-    ![alt text][im05]
-    ![alt text][im15]
-    ![alt text][im16]
     
-    Below are examples of thresholds in the HLS L channel, HLS S channel and the LAB B channel:
-    ![alt text][im07]
-    ![alt text][im08]
-    ![alt text][im17]
+The below image shows the various channels of three different color spaces for the same image:
+![alt text][im05]
+    
+![alt text][im15]
+    
+![alt text][im16]
+    
+Below are examples of thresholds in the HLS L channel, HLS S channel and the LAB B channel:
+![alt text][im07]
+    
+![alt text][im08]
+    
+![alt text][im17]
 
-    I chose to use just the L channel of the HLS color space to isolate white lines and the B channel of the LAB colorspace to isolate yellow lines.
-    Below are the results of applying the __complete pipeline__ to various sample images:
+I chose to use just the L channel of the HLS color space to isolate white lines and the B channel of the LAB colorspace to isolate yellow lines.
+Below are the results of applying the __complete pipeline__ to various sample images:
     ![alt text][im09]
     
-    #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
-    The function `unwarp` implements the perspective transform. A perspective transform maps the points in a given image to different, desired, image points with a new perspective. The perspective transform you’ll be most interested in is a bird’s-eye view transform that let’s us view a lane from above; this will be useful for calculating the lane curvature later on. A perspective transform can also be used for all kinds of different view points.
-    Steps include:
+#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+The function `unwarp` implements the perspective transform. A perspective transform maps the points in a given image to different, desired, image points with a new perspective. The perspective transform you’ll be most interested in is a bird’s-eye view transform that let’s us view a lane from above; this will be useful for calculating the lane curvature later on. A perspective transform can also be used for all kinds of different view points.
+Steps include:
     * Compute the perspective transform, M, given source and destination points `cv2.getPerspectiveTransform(src, dst)
     * Compute the inverse perspective transform (Minv) `cv2.getPerspectiveTransform(dst, src)
     * Warp an image using the perspective transform, M: `cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)`
@@ -98,8 +106,8 @@ The goals / steps of this project are the following:
     The `polyfit_using_prev_fit` function performs basically the same task, but alleviates much difficulty of the search process by leveraging a previous fit (from a previous video frame, for example) and only searching for lane pixels within a certain range of that fit. The green shaded area shows where we searched for the lines this time. So, once you know where the lines are in one frame of video, you can do a highly targeted search for them in the next frame. This is equivalent to using a customized region of interest for each frame of video, and should help you track the lanes through sharp curves and tricky conditions. If you lose track of the lines, go back to your sliding windows search or other method to rediscover them. The image below demonstrates this - the green shaded area is the range from the previous fit, and the yellow lines and red and blue pixels are from the current image:
     ![alt text][im12]
     
-    #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
-    The radius of curvature is based upon [this website](http://www.intmath.com/applications-differentiation/8-radius-curvature.php) and calculated in the code cell titled \"Radius of Curvature and Distance from Lane Center Calculation\" using this line of code (altered for clarity)
+#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+The radius of curvature is based upon [this website](http://www.intmath.com/applications-differentiation/8-radius-curvature.php) and calculated in the code cell titled \"Radius of Curvature and Distance from Lane Center Calculation\" using this line of code (altered for clarity)
      `curve_radius = ((1 + (2*fit[0]*y_0*y_meters_per_pixel + fit[1])**2)**1.5) / np.absolute(2*fit[0])`
     In this example, `fit[0]` is the first coefficient (the y-squared coefficient) of the second order polynomial fit, and `fit[1]` is the second (y) coefficient. `y_0` is the y position within the image upon which the curvature calculation is based (the bottom-most y - the position of the car in the image - was chosen). `y_meters_per_pixel` is the factor used for converting from pixels to meters. This conversion was also used to generate a new fit with coefficients in terms of meters.
     The position of the vehicle with respect to the center of the lane is calculated with the following lines of code: `lane_center_position = (r_fit_x_int + l_fit_x_int) /2
@@ -115,34 +123,35 @@ The goals / steps of this project are the following:
     * Calculate the new radii of curvature,
     `left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
     right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])`,
-    * Now our radius of curvature is in meters
+    * Now radius of curvature is in meters
     __Radius of curvature: 454.166802555 m, 1274.44473829 m
     Distance from lane center: -0.398372165719 m __
    
-   #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
    
-    I implemented this step in the code cells titled \"Draw the Detected Lane Back onto the Original Image\" and \"Draw Curvature Radius and Distance from Center Data onto the Original Image\" in the Jupyter notebook. A polygon is generated based on plots of the left and right fits, warped back to the perspective of the original image using the inverse perspective matrix `Minv` and overlaid onto the original image. The image below is an example of the results of the `draw_lane` function:\n",
+I implemented this step in the code cells titled \"Draw the Detected Lane Back onto the Original Image\" and \"Draw Curvature Radius and Distance from Center Data onto the Original Image\" in the Jupyter notebook. A polygon is generated based on plots of the left and right fits, warped back to the perspective of the original image using the inverse perspective matrix `Minv` and overlaid onto the original image. The image below is an example of the results of the `draw_lane` function:\n",
    ![alt text][im13]
-    Below is an example of the results of the `draw_data` function, which writes text identifying the curvature radius and vehicle position data onto the original image:
+Below is an example of the results of the `draw_data` function, which writes text identifying the curvature radius and vehicle position data onto the original image:
     ![alt text][im14]
    
-   ### Pipeline (video)\n",
-    #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-    Here are the links to various videos generated using the pipeline above [Project video]
-    project_video_output.mp4)
-    [Challenge video](./challenge_video_output.mp4)
-    [Harder challenge video](./harder_challenge_video_output.mp4)
-    
+### Pipeline (video)
+#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+Here are the links to various videos generated using the pipeline above:
+
+[Project video](./project_video_output.mp4)
+[Challenge video](./challenge_video_output.mp4)
+[Harder challenge video](./harder_challenge_video_output.mp4)
+
 ### Discussion
-    #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
-    The problems I encountered were almost exclusively due to lighting conditions, shadows, discoloration, etc. It wasn't difficult to dial in threshold parameters to get the pipeline to perform well on the original project video (particularly after discovering the B channel of the LAB colorspace, which isolates the yellow lines very well), even on the lighter-gray bridge sections that comprised the most difficult sections of the video. It was trying to extend the same pipeline to the challenge video that presented the greatest challenge. The lane lines don't necessarily occupy the same pixel value (speaking of the L channel of the HLS color space) range on this video that they occupy on the first video, so the normalization/scaling technique helped here quite a bit, although it also tended to create problems (large noisy areas activated in the binary image) when the white lines didn't contrast with the rest of the image enough.  This would definitely be an issue in snow or in a situation where, for example, a bright white car were driving among dull white lane lines.
-    Below are some more considerations to make it more robust
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+The problems I encountered were almost exclusively due to lighting conditions, shadows, discoloration, etc. It wasn't difficult to dial in threshold parameters to get the pipeline to perform well on the original project video (particularly after discovering the B channel of the LAB colorspace, which isolates the yellow lines very well), even on the lighter-gray bridge sections that comprised the most difficult sections of the video. It was trying to extend the same pipeline to the challenge video that presented the greatest challenge. The lane lines don't necessarily occupy the same pixel value (speaking of the L channel of the HLS color space) range on this video that they occupy on the first video, so the normalization/scaling technique helped here quite a bit, although it also tended to create problems (large noisy areas activated in the binary image) when the white lines didn't contrast with the rest of the image enough.  This would definitely be an issue in snow or in a situation where, for example, a bright white car were driving among dull white lane lines.
+Below are some more considerations to make it more robust
     a) Different types of curve fits
     Euler spirals, are parametric curves whose curvature changes linearly with the independent variable. They are frequently used in highway engineering to design connecting roads, on and off ramps etc. These might be a better candidate curve to fit to the lane pixels rather than simple second order polynomials.
     b) Gradient enhancement
     A color image can be converted to grayscale in many ways. The easiest is what is called equal-weight conversion where the red, green and blue values are given equal weights and averaged. However, the ratio between these weights can be modified to enhance the gradient of the edges of interest (such as lanes). According to Ref.2, grayscale images converted using the ratios 0.5 for red, 0.4 for green, and 0.1 for blue, are better at detecting yellow and white lanes. This method was used for converting images to gray scale in this project.
     
-    ### References
-    [1] Juneja, M., & Sandhu, P. S. (2009). Performance evaluation of edge detection techniques for images in spatial domain. International Journal of Computer Theory and Engineering, 1(5), 614.
-    [2] Yoo, H., Yang, U., & Sohn, K. (2013). Gradient-enhancing conversion for illumination-robust lane detection. IEEE Transactions on Intelligent Transportation Systems, 14(3), 1083-1094.
-    [3] McCall, J. C., & Trivedi, M. M. (2006). Video-based lane estimation and tracking for driver assistance: survey, system, and evaluation. IEEE transactions on intelligent transportation systems, 7(1), 20-37.
+### References
+[1] Juneja, M., & Sandhu, P. S. (2009). Performance evaluation of edge detection techniques for images in spatial domain. International Journal of Computer Theory and Engineering, 1(5), 614.
+[2] Yoo, H., Yang, U., & Sohn, K. (2013). Gradient-enhancing conversion for illumination-robust lane detection. IEEE Transactions on Intelligent Transportation Systems, 14(3), 1083-1094.
+[3] McCall, J. C., & Trivedi, M. M. (2006). Video-based lane estimation and tracking for driver assistance: survey, system, and evaluation. IEEE transactions on intelligent transportation systems, 7(1), 20-37.
